@@ -17,12 +17,12 @@ class ToyRobot {
             throw new Error('Invalid PLACE command')
         }
         let params = paramsStr.split(',')
-        let xPos = parseInt(params[0])
-        let yPos = parseInt(params[1])
+        let xPos = params[0]
+        let yPos = params[1]
         let headingStr = params[2]
-        if (xPos && yPos) {
-            this.xPos = xPos
-            this.yPos = yPos
+        if (!isNaN(xPos) && !isNaN(yPos)) {
+            this.xPos = +xPos
+            this.yPos = +yPos
         } else {
             throw new Error('Invalid X or Y in PLACE command')
         }
@@ -41,8 +41,8 @@ class ToyRobot {
     }
 
     move() {
-        this.xPos = this.xPos + 1 * Math.cos(this.heading)
-        this.yPos = this.yPos + 1 * Math.sin(this.heading)
+        this.xPos = this.xPos + 1 * Math.sin(this.heading * Math.PI / 180)
+        this.yPos = this.yPos + 1 * Math.cos(this.heading * Math.PI / 180)
         console.log('move', this.xPos, this.yPos, this.heading)
     }
 
@@ -73,7 +73,7 @@ class ToyRobot {
         } else if (this.heading === 270) {
             faceStr = 'WEST'
         }
-        console.log(`${this.xPos},${this.yPos},${faceStr}`)
+        console.log(`${Math.round(this.xPos)},${Math.round(this.yPos)},${faceStr}`)
     }
 
     readFile() {
@@ -100,5 +100,7 @@ class ToyRobot {
     }
 }
 
+new ToyRobot('example-a.txt')
+new ToyRobot('example-b.txt')
 new ToyRobot('example-c.txt')
 
