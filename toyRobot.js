@@ -41,7 +41,7 @@ class ToyRobot {
             throw new Error('Invalid heading in PLACE command')
         }
         this.robotIsPlaced = true
-        //onsole.log('place', this.xPos, this.yPos, this.heading)
+        //console.log('place', this.xPos, this.yPos, this.heading)
     }
 
     move() {
