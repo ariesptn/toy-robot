@@ -41,6 +41,8 @@ class ToyRobot {
     }
 
     move() {
+        this.xPos = this.xPos + 1 * Math.cos(this.heading)
+        this.yPos = this.yPos + 1 * Math.sin(this.heading)
         console.log('move', this.xPos, this.yPos, this.heading)
     }
 
