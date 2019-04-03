@@ -3,13 +3,13 @@ const fs = require('fs')
 class ToyRobot {
     constructor(filePath) {
         this.filePath = filePath
-        this.xSize = 5
-        this.ySize = 5
+        this.xMax = 4
+        this.yMax = 4
         this.xPos = 0
         this.yPos = 0
         this.heading = 0
         this.commands = []
-        this.execute()
+        this.robotIsPlaced = false
     }
 
     place(paramsStr) {
@@ -21,6 +21,9 @@ class ToyRobot {
         let yPos = params[1]
         let headingStr = params[2]
         if (!isNaN(xPos) && !isNaN(yPos)) {
+            if (xPos < 0 || yPos < 0 || xPos > this.xMax || yPos > this.yMax) {
+                throw new Error('Out of bound position in PLACE command')
+            }
             this.xPos = +xPos
             this.yPos = +yPos
         } else {
@@ -37,13 +40,21 @@ class ToyRobot {
         } else {
             throw new Error('Invalid heading in PLACE command')
         }
-        console.log('place', this.xPos, this.yPos, this.heading)
+        this.robotIsPlaced = true
+        //onsole.log('place', this.xPos, this.yPos, this.heading)
     }
 
     move() {
-        this.xPos = this.xPos + 1 * Math.sin(this.heading * Math.PI / 180)
-        this.yPos = this.yPos + 1 * Math.cos(this.heading * Math.PI / 180)
-        console.log('move', this.xPos, this.yPos, this.heading)
+        let xPos = this.xPos + 1 * Math.sin(this.heading * Math.PI / 180)
+        let yPos = this.yPos + 1 * Math.cos(this.heading * Math.PI / 180)
+        if (Math.round(xPos) >= 0 &&
+            Math.round(yPos) >= 0 &&
+            Math.round(xPos) <= this.xMax &&
+            Math.round(yPos) <= this.yMax) {
+            this.xPos = xPos
+            this.yPos = yPos
+        }
+        //console.log('move', this.xPos, this.yPos, this.heading)
     }
 
     left() {
@@ -51,7 +62,7 @@ class ToyRobot {
         if (this.heading <= 0) {
             this.heading += 360
         }
-        console.log('left', this.heading)
+        //console.log('left', this.heading)
     }
 
     right() {
@@ -59,7 +70,7 @@ class ToyRobot {
         if (this.heading > 360) {
             this.heading -= 360
         }
-        console.log('right', this.heading)
+        //console.log('right', this.heading)
     }
 
     report() {
@@ -85,14 +96,15 @@ class ToyRobot {
         for (const command of this.commands) {
             if (command.slice(0, 5) === 'PLACE') {
                 this.place(command.split(' ')[1])
-            } else if (command === 'MOVE') {
+            } else if (command === 'MOVE' && this.robotIsPlaced) {
                 this.move()
-            } else if (command === 'LEFT') {
+            } else if (command === 'LEFT' && this.robotIsPlaced) {
                 this.left()
-            } else if (command === 'RIGHT') {
+            } else if (command === 'RIGHT' && this.robotIsPlaced) {
                 this.right()
-            } else if (command === 'REPORT') {
+            } else if (command === 'REPORT' && this.robotIsPlaced) {
                 this.report()
+            } else if (command.trim() === '') {
             } else {
                 throw new Error('Unknown command')
             }
@@ -100,7 +112,6 @@ class ToyRobot {
     }
 }
 
-new ToyRobot('example-a.txt')
-new ToyRobot('example-b.txt')
-new ToyRobot('example-c.txt')
+let example = new ToyRobot('example.txt')
+example.execute()
 
