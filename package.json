@@ -1,0 +1,24 @@
+{
+  "name": "toy-robot",
+  "version": "1.0.0",
+  "description": "Toy Robot Simulator ===================",
+  "main": "main.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ariesptn/toy-robot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ariesptn/toy-robot/issues"
+  },
+  "homepage": "https://github.com/ariesptn/toy-robot#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2"
+  }
+}
